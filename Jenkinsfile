@@ -42,11 +42,12 @@ pipeline {
                 script {
                     sshagent(["${NODEJS_DEPLOYMENT_SERVER_SSH_KEY}"]) {
                         sh """
-                            ssh -o StrictHostKeyChecking=no ${NODEJS_DEPLOYMENT_SERVER_USER}@${NODEJS_DEPLOYMENT_SERVER_IP} << 'EOF'
-                            cd ${NODEJS_DEPLOYMENT_REMOTE_PATH} 
-                            npm install  
+                            ssh -o StrictHostKeyChecking=no ${NODEJS_DEPLOYMENT_SERVER_USER}@${NODEJS_DEPLOYMENT_SERVER_IP}
+                            "cd ${NODEJS_DEPLOYMENT_REMOTE_PATH} &&
+                            npm install  &&
                             npx pm2 start app.js --name my-app --update-env || npx pm2 restart my-app
-                            EOF
+                            "
+                            
                         """
                     }
                 }
