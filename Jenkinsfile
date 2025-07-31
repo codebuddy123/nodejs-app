@@ -30,7 +30,7 @@ pipeline {
                    
                     sh "ssh -o StrictHostKeyChecking=no ${NODEJS_DEPLOYMENT_SERVER_USER}@${NODEJS_DEPLOYMENT_SERVER_IP}"
                      // Ensure the remote directory exists
-                    sh  "mkdir -p ${NODEJS_DEPLOYMENT_REMOTE_PATH}"
+                    sh  "sudo mkdir -p ${NODEJS_DEPLOYMENT_REMOTE_PATH}"
                     // Use rsync to transfer files to the deployment server
                     sh "rsync -avz --exclude=.git ./ ${NODEJS_DEPLOYMENT_SERVER_USER}@${NODEJS_DEPLOYMENT_SERVER_IP}:${NODEJS_DEPLOYMENT_REMOTE_PATH}"
 
