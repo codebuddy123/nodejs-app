@@ -2,7 +2,7 @@ pipeline {
     agent any 
     
     environment {
-        NODEJS_DEPLOYMENT_SERVER_USER = credentials('nodejs-deployment-server-user')
+        NODEJS_DEPLOYMENT_SERVER_USER = "ec2-user"
         NODEJS_DEPLOYMENT_SERVER_IP = "172.31.38.104"
         NODEJS_DEPLOYMENT_SERVER_SSH_KEY = credentials('nodejs-deployment-server-ssh-key')
         NODEJS_DEPLOYMENT_REMOTE_PATH = "/home/ec2-user/nodejs-app/"
@@ -19,7 +19,7 @@ pipeline {
                 sh 'npm install'
             }
         }
-        
+
         stage('Transfer the files into Deployment Server') {
             steps {
                 sshagent(['env.NODEJS_DEPLOYMENT_SERVER_SSH_KEY']) {
