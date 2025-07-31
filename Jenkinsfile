@@ -7,7 +7,7 @@ pipeline {
     }
 
    triggers {
-        githubPush()
+        githubPush()  //Make sure you enable GitHub webhook for this repository.
     } 
 
     options {
@@ -53,7 +53,7 @@ pipeline {
                         sh '''
                         ssh $NODEJS_DEPLOYMENT_SERVER_USER@$NODEJS_DEPLOYMENT_SERVER_IP "
                             cd $NODEJS_DEPLOYMENT_REMOTE_PATH &&
-                            npm start &
+                            npx pm2 start app.js --name my-app --update-env || npx pm2 restart my-app
                         "
                     '''
                     }
@@ -70,8 +70,6 @@ pipeline {
         failure {
             echo 'Build or Deployment Failed!'
         }
-        always {
-            cleanWs() // Clean workspace after build
-        }
+       
     }
 }
