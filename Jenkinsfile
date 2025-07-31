@@ -7,7 +7,7 @@ pipeline {
     environment {
         NODEJS_DEPLOYMENT_SERVER_USER = "ec2-user"
         NODEJS_DEPLOYMENT_SERVER_IP = "172.31.38.104"
-        NODEJS_DEPLOYMENT_SERVER_SSH_KEY = credentials('nodejscred') // Ensure this credential ID matches your Jenkins credentials
+        NODEJS_DEPLOYMENT_SERVER_SSH_KEY = "nodejscred" // Ensure this credential ID matches your Jenkins credentials
         NODEJS_DEPLOYMENT_REMOTE_PATH = "/home/ec2-user/nodejs-app/"
     }
     stages {
