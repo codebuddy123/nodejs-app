@@ -5,6 +5,15 @@ pipeline {
     tools {
         nodejs 'NodeJS-20.19.4'
     }
+
+   triggers {
+        githubPush()
+    } 
+
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '5')) // Keep last 5 builds
+        timeout(time: 30, unit: 'MINUTES') // Timeout after 30 minutes
+    }
     environment {
         NODEJS_DEPLOYMENT_SERVER_USER = "ec2-user"
         NODEJS_DEPLOYMENT_SERVER_IP = "172.31.38.104"
@@ -44,7 +53,7 @@ pipeline {
                         sh '''
                         ssh $NODEJS_DEPLOYMENT_SERVER_USER@$NODEJS_DEPLOYMENT_SERVER_IP "
                             cd $NODEJS_REMOTE_PATH &&
-                            npx pm2 start app.js --name my-app --update-env || npx pm2 restart my-app
+                            npm start &
                         "
                     '''
                     }
