@@ -44,7 +44,6 @@ pipeline {
                         sh '''
                         ssh $NODEJS_DEPLOYMENT_SERVER_USER@$NODEJS_DEPLOYMENT_SERVER_IP "
                             cd $NODEJS_REMOTE_PATH &&
-                            npm install &&
                             npx pm2 start app.js --name my-app --update-env || npx pm2 restart my-app
                         "
                     '''
