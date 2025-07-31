@@ -30,7 +30,7 @@ pipeline {
                     sshagent(["${NODEJS_DEPLOYMENT_SERVER_SSH_KEY}"]) {
                         sh """
                             ssh -o StrictHostKeyChecking=no ${NODEJS_DEPLOYMENT_SERVER_USER}@${NODEJS_DEPLOYMENT_SERVER_IP} "mkdir -p ${NODEJS_DEPLOYMENT_REMOTE_PATH}"
-                            rsync -avz --exclude='.git' ./ ${NODEJS_DEPLOYMENT_SERVER_USER}@${NODEJS_DEPLOYMENT_SERVER_IP}:${NODEJS_DEPLOYMENT_REMOTE_PATH}
+                            rsync -avz --exclude='.git' --exclude=node_modules ./ ${NODEJS_DEPLOYMENT_SERVER_USER}@${NODEJS_DEPLOYMENT_SERVER_IP}:${NODEJS_DEPLOYMENT_REMOTE_PATH}
                         """
                     }
                 }
@@ -43,7 +43,8 @@ pipeline {
                     sshagent(["${NODEJS_DEPLOYMENT_SERVER_SSH_KEY}"]) {
                         sh """
                             ssh -o StrictHostKeyChecking=no ${NODEJS_DEPLOYMENT_SERVER_USER}@${NODEJS_DEPLOYMENT_SERVER_IP} << 'EOF'
-                            cd ${NODEJS_DEPLOYMENT_REMOTE_PATH}
+                            cd ${NODEJS_DEPLOYMENT_REMOTE_PATH} 
+                            npm install  
                             npx pm2 start app.js --name my-app --update-env || npx pm2 restart my-app
                             EOF
                         """
