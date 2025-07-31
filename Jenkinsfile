@@ -1,6 +1,9 @@
 pipeline {
     agent any 
     
+    tools {
+        nodejs 'NodeJS-20.19.4'
+    }
     environment {
         NODEJS_DEPLOYMENT_SERVER_USER = "ec2-user"
         NODEJS_DEPLOYMENT_SERVER_IP = "172.31.38.104"
