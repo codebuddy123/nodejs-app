@@ -1,3 +1,4 @@
+
 pipeline {
     agent any 
     
@@ -25,28 +26,28 @@ pipeline {
 
         stage('Transfer the files into Deployment Server') {
             steps {
-                sshagent([env.NODEJS_DEPLOYMENT_SERVER_SSH_KEY]) {
-                    // Create the remote directory if it doesn't exist and transfer files
-                   sh '''
-                        ssh -o StrictHostKeyChecking=no ${NODEJS_DEPLOYMENT_SERVER_USER}@${NODEJS_DEPLOYMENT_SERVER_IP} "mkdir -p ${NODEJS_DEPLOYMENT_REMOTE_PATH}"
-                        rsync -avz --exclude=.git ./ ${NODEJS_DEPLOYMENT_SERVER_USER}@${NODEJS_DEPLOYMENT_SERVER_IP}:${NODEJS_DEPLOYMENT_REMOTE_PATH}"
-                      '''
-
-                }  
+                script {
+                    sshagent(["${NODEJS_DEPLOYMENT_SERVER_SSH_KEY}"]) {
+                        sh """
+                            ssh -o StrictHostKeyChecking=no ${NODEJS_DEPLOYMENT_SERVER_USER}@${NODEJS_DEPLOYMENT_SERVER_IP} "mkdir -p ${NODEJS_DEPLOYMENT_REMOTE_PATH}"
+                            rsync -avz --exclude='.git' ./ ${NODEJS_DEPLOYMENT_SERVER_USER}@${NODEJS_DEPLOYMENT_SERVER_IP}:${NODEJS_DEPLOYMENT_REMOTE_PATH}
+                        """
+                    }
+                }
             }
         }
         
         stage('Deploy to Deployment Server') {
             steps {
-                sshagent([env.NODEJS_DEPLOYMENT_SERVER_SSH_KEY]) {
-                    // Connect to the remote server and run deployment commands
-                     
-                    sh '''                        
-                        ssh -o StrictHostKeyChecking=no ${env.NODEJS_DEPLOYMENT_SERVER_USER}@${env.NODEJS_DEPLOYMENT_SERVER_IP}
-                        cd ${env.NODEJS_DEPLOYMENT_REMOTE_PATH} &&
-                        npx pm2 start app.js --name my-app --update-env || npx pm2 restart my-app
-                       
-                       '''
+                script {
+                    sshagent(["${NODEJS_DEPLOYMENT_SERVER_SSH_KEY}"]) {
+                        sh """
+                            ssh -o StrictHostKeyChecking=no ${NODEJS_DEPLOYMENT_SERVER_USER}@${NODEJS_DEPLOYMENT_SERVER_IP} << 'EOF'
+                            cd ${NODEJS_DEPLOYMENT_REMOTE_PATH}
+                            npx pm2 start app.js --name my-app --update-env || npx pm2 restart my-app
+                            EOF
+                        """
+                    }
                 }
                 echo 'Application Deployed...'
             }
