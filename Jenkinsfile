@@ -39,7 +39,7 @@ pipeline {
                     sshagent(["${NODEJS_DEPLOYMENT_SERVER_SSH_KEY}"]) {
                         sh """
                             ssh -o StrictHostKeyChecking=no ${NODEJS_DEPLOYMENT_SERVER_USER}@${NODEJS_DEPLOYMENT_SERVER_IP} "mkdir -p ${NODEJS_DEPLOYMENT_REMOTE_PATH}"
-                            rsync -avz --exclude='.git' --exclude=node_modules ./ ${NODEJS_DEPLOYMENT_SERVER_USER}@${NODEJS_DEPLOYMENT_SERVER_IP}:${NODEJS_DEPLOYMENT_REMOTE_PATH}
+                            rsync -avz --exclude='.git' ./ ${NODEJS_DEPLOYMENT_SERVER_USER}@${NODEJS_DEPLOYMENT_SERVER_IP}:${NODEJS_DEPLOYMENT_REMOTE_PATH}
                         """
                     }
                 }
@@ -60,6 +60,18 @@ pipeline {
                 }
                 echo 'Application Deployed...'
             }
+        }
+    }
+    post
+    {
+        success {
+            echo 'Build and Deployment Successful!'
+        }
+        failure {
+            echo 'Build or Deployment Failed!'
+        }
+        always {
+            cleanWs() // Clean workspace after build
         }
     }
 }
