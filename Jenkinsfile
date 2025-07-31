@@ -7,7 +7,7 @@ pipeline {
     environment {
         NODEJS_DEPLOYMENT_SERVER_USER = "ec2-user"
         NODEJS_DEPLOYMENT_SERVER_IP = "172.31.38.104"
-        NODEJS_DEPLOYMENT_SERVER_SSH_KEY = credentials('nodejscredentials')
+        NODEJS_DEPLOYMENT_SERVER_SSH_KEY = "nodejscredentials"
         NODEJS_DEPLOYMENT_REMOTE_PATH = "/home/ec2-user/nodejs-app/"
     }
     stages {
