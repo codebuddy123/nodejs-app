@@ -1,1 +1,4 @@
 npx pm2 start app.js --name my-app --update-env || npx pm2 restart my-app
+You can also use the above command to start the app.
+
+

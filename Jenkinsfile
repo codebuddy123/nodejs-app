@@ -52,7 +52,7 @@ pipeline {
                     sshagent(["${NODEJS_DEPLOYMENT_SERVER_SSH_KEY}"]) {
                         sh '''
                         ssh $NODEJS_DEPLOYMENT_SERVER_USER@$NODEJS_DEPLOYMENT_SERVER_IP "
-                            cd $NODEJS_REMOTE_PATH &&
+                            cd $NODEJS_DEPLOYMENT_REMOTE_PATH &&
                             npm start &
                         "
                     '''
