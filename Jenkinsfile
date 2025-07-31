@@ -41,14 +41,13 @@ pipeline {
             steps {
                 script {
                     sshagent(["${NODEJS_DEPLOYMENT_SERVER_SSH_KEY}"]) {
-                        sh """
-                            ssh -o StrictHostKeyChecking=no ${NODEJS_DEPLOYMENT_SERVER_USER}@${NODEJS_DEPLOYMENT_SERVER_IP}
-                            "cd ${NODEJS_DEPLOYMENT_REMOTE_PATH} &&
-                            npm install  &&
+                        sh '''
+                        ssh $NODEJS_DEPLOYMENT_SERVER_USER@$NODEJS_DEPLOYMENT_SERVER_IP "
+                            cd $NODEJS_REMOTE_PATH &&
+                            npm install &&
                             npx pm2 start app.js --name my-app --update-env || npx pm2 restart my-app
-                            "
-                            
-                        """
+                        "
+                    '''
                     }
                 }
                 echo 'Application Deployed...'
