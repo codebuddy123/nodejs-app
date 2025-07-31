@@ -28,9 +28,9 @@ pipeline {
                 sshagent([env.NODEJS_DEPLOYMENT_SERVER_SSH_KEY]) {
                     
                     // Ensure the remote directory exists
-                    sh "ssh -o StrictHostKeyChecking=no  ${env.NODEJS_DEPLOYMENT_SERVER_USER}@${env.NODEJS_DEPLOYMENT_SERVER_IP} mkdir -p ${env.NODEJS_DEPLOYMENT_REMOTE_PATH}"
+                    sh "ssh -o StrictHostKeyChecking=no  $NODEJS_DEPLOYMENT_SERVER_USER@$NODEJS_DEPLOYMENT_SERVER_IP mkdir -p ${env.NODEJS_DEPLOYMENT_REMOTE_PATH}"
                     // Use rsync to transfer files to the deployment server
-                    sh "rsync -avz --exclude='.git' ./ env.NODEJS_DEPLOYMENT_SERVER_USER@${env.NODEJS_DEPLOYMENT_SERVER_IP}:${env.NODEJS_DEPLOYMENT_REMOTE_PATH}"  
+                    sh "rsync -avz --exclude='.git' ./ $NODEJS_DEPLOYMENT_SERVER_USER@$NODEJS_DEPLOYMENT_SERVER_IP:$NODEJS_DEPLOYMENT_REMOTE_PATH"  
 
 
                 }  
