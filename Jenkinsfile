@@ -25,9 +25,9 @@ pipeline {
                 sshagent(['env.NODEJS_DEPLOYMENT_SERVER_SSH_KEY']) {
                     
                     // Ensure the remote directory exists
-                    ssh -o StrictHostKeyChecking=no  ${env.NODEJS_DEPLOYMENT_SERVER_USER}@${env.NODEJS_DEPLOYMENT_SERVER_IP} mkdir -p ${env.NODEJS_DEPLOYMENT_REMOTE_PATH}
+                    sh "ssh -o StrictHostKeyChecking=no  ${env.NODEJS_DEPLOYMENT_SERVER_USER}@${env.NODEJS_DEPLOYMENT_SERVER_IP} mkdir -p ${env.NODEJS_DEPLOYMENT_REMOTE_PATH}"
                     // Use rsync to transfer files to the deployment server
-                    rsync -avz --exclude='.git' ./ env.NODEJS_DEPLOYMENT_SERVER_USER@${env.NODEJS_DEPLOYMENT_SERVER_IP}:${env.NODEJS_DEPLOYMENT_REMOTE_PATH}  
+                    sh "rsync -avz --exclude='.git' ./ env.NODEJS_DEPLOYMENT_SERVER_USER@${env.NODEJS_DEPLOYMENT_SERVER_IP}:${env.NODEJS_DEPLOYMENT_REMOTE_PATH}"  
 
 
                 }  
@@ -38,12 +38,13 @@ pipeline {
             steps {
                 sshagent(['env.NODEJS_DEPLOYMENT_SERVER_SSH_KEY']) {
                     // Connect to the remote server and run deployment commands
-                    ssh -o StrictHostKeyChecking=no ${env.NODEJS_DEPLOYMENT_SERVER_USER}@${env.NODEJS_DEPLOYMENT_SERVER_IP} 
-                    """
+                     
+                    sh '''                        
+                        ssh -o StrictHostKeyChecking=no ${env.NODEJS_DEPLOYMENT_SERVER_USER}@${env.NODEJS_DEPLOYMENT_SERVER_IP}
                         cd ${env.NODEJS_DEPLOYMENT_REMOTE_PATH} &&
                         npx pm2 start app.js --name my-app --update-env || npx pm2 restart my-app
                        
-                    """
+                       '''
                 }
                 echo 'Application Deployed...'
             }
