@@ -25,7 +25,7 @@ pipeline {
 
         stage('Transfer the files into Deployment Server') {
             steps {
-                sshagent(['env.NODEJS_DEPLOYMENT_SERVER_SSH_KEY']) {
+                sshagent([env.NODEJS_DEPLOYMENT_SERVER_SSH_KEY]) {
                     
                     // Ensure the remote directory exists
                     sh "ssh -o StrictHostKeyChecking=no  ${env.NODEJS_DEPLOYMENT_SERVER_USER}@${env.NODEJS_DEPLOYMENT_SERVER_IP} mkdir -p ${env.NODEJS_DEPLOYMENT_REMOTE_PATH}"
@@ -39,7 +39,7 @@ pipeline {
         
         stage('Deploy to Deployment Server') {
             steps {
-                sshagent(['env.NODEJS_DEPLOYMENT_SERVER_SSH_KEY']) {
+                sshagent([env.NODEJS_DEPLOYMENT_SERVER_SSH_KEY]) {
                     // Connect to the remote server and run deployment commands
                      
                     sh '''                        
